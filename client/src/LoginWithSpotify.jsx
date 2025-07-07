@@ -1,5 +1,5 @@
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
-const REDIRECT_URI = "http://localhost:5173/callback";
+const REDIRECT_URI = import.meta.env.VITE_SPOTIFY_REDIRECT_URI;
 const SCOPES = ["user-read-private", "user-read-email", "user-top-read"];
 
 const LoginWithSpotify = () => {
