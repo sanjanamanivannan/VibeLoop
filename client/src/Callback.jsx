@@ -9,13 +9,11 @@ const Callback = () => {
     const token = params.get("access_token");
 
     if (token) {
-      console.log("✅ Token from URL:", token);
+      console.log("✅ Access token found:", token);
       localStorage.setItem("spotify_token", token);
-
-      // Clear the token from URL and navigate cleanly to dashboard
-      navigate("/dashboard", { replace: true });
+      navigate("/dashboard");
     } else {
-      console.error("❌ No access token found in URL.");
+      console.error("❌ No access token found in URL");
     }
   }, [navigate]);
 
