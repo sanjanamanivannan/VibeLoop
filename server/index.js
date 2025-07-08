@@ -3,6 +3,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import spotifyAuth from "./routes/spotifyAuth.js"; 
 import OpenAI from 'openai';
+import summariesRouter from "./routes/summaries.js";
+
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -14,12 +17,14 @@ dotenv.config();
 
 const app = express();
 
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // 🔗 Connect Spotify route
 app.use("/api/auth", spotifyAuth);
+app.use("/summaries", summariesRouter);
 
 
 // Test route (optional)
