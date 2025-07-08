@@ -1,25 +1,22 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 const Callback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("code");
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("access_token");
 
-    const getToken = async () => {
-      const res = await axios.post("http://localhost:3001/api/spotify/getSpotifyToken", {
-        code,
-      });
+    if (token) {
+      console.log("✅ Token from URL:", token);
+      localStorage.setItem("spotify_token", token);
 
-      console.log("Spotify access token:", res.data.access_token);
-      // Save to localStorage or state
-      navigate("/");
-    };
-
-    if (code) getToken();
+      // Clear the token from URL and navigate cleanly to dashboard
+      navigate("/dashboard", { replace: true });
+    } else {
+      console.error("❌ No access token found in URL.");
+    }
   }, [navigate]);
 
   return <p>Logging in...</p>;

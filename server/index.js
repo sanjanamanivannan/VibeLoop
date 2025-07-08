@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 // 🔗 Connect Spotify route
-app.use("/api/spotify", spotifyAuth);
+app.use("/api/auth", spotifyAuth);
 
 // Test route (optional)
 app.get("/", (req, res) => {

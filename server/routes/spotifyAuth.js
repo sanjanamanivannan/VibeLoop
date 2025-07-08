@@ -5,6 +5,7 @@ dotenv.config();
 
 const router = express.Router();
 
+
 router.post("/getSpotifyToken", async (req, res) => {
   const code = req.body.code;
 
@@ -65,15 +66,15 @@ router.get("/callback/spotify", async (req, res) => {
       headers
     );
 
-    // You can store response.data.access_token etc in session or database here
+    const access_token = response.data.access_token;
+    const frontendRedirectUri = process.env.FRONTEND_REDIRECT_URI || "http://localhost:5173/callback";
 
-    // Redirect user to frontend after successful login
-    res.redirect(process.env.FRONTEND_URL || "http://localhost:3000");
+    // ✅ Redirect to frontend and include access_token as a query param
+    res.redirect(`${frontendRedirectUri}?access_token=${access_token}`);
   } catch (error) {
     console.error("Error exchanging code:", error);
     res.status(500).send("Authentication failed");
   }
 });
-
 
 export default router;
