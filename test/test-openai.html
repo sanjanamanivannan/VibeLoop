@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VibeLoop Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { background: #1db954; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        #result { margin: 20px 0; padding: 10px; border: 1px solid #ddd; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🎧 VibeLoop OpenAI Test</h1>
+    <button onclick="testChat()">Test Chat</button>
+    <div id="result">Click the button to test!</div>
+    
+    <script>
+        async function testChat() {
+            document.getElementById("result").innerHTML = "Testing...";
+            
+            try {
+                const response = await fetch("http://localhost:3001/api/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        messages: [{ role: "user", content: "Hello, test message!" }]
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById("result").innerHTML = `✅ Success!<br><strong>Response:</strong> ${data.message}`;
+                } else {
+                    document.getElementById("result").innerHTML = `❌ Error: ${data.error}`;
+                }
+            } catch (error) {
+                document.getElementById("result").innerHTML = `❌ Network Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
