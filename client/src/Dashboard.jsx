@@ -1,31 +1,39 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("spotify_token");
-    console.log("📦 Retrieved token:", token);
-
+    console.log("📦 Token from localStorage:", token);
+  
     if (!token) {
       console.warn("❌ No token found in localStorage");
       setLoading(false);
       return;
     }
-
+  
     fetch("https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=short_term", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Spotify API error: ${errorText}`);
+        }
+        return res.json();
+      })
       .then((data) => {
-        console.log("🎧 Spotify response:", data);
-        if (data.items) {
+        console.log("🎧 Spotify API response:", data);
+        if (data.items && data.items.length > 0) {
           setTracks(data.items);
         } else {
-          console.warn("⚠️ No items found in Spotify response", data);
+          console.warn("⚠️ No tracks found in response");
         }
         setLoading(false);
       })
@@ -35,11 +43,25 @@ export default function Dashboard() {
       });
   }, []);
 
+  const handleLogout = () => {
+    localStorage.removeItem("spotify_token"); // Clear token
+    navigate("/"); // Go back to login
+  };
+
   if (loading) return <p>Loading your top tracks...</p>;
 
   return (
     <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Your Top Tracks</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-xl font-bold">Your Top Tracks</h1>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        >
+          Logout
+        </button>
+      </div>
+
       {tracks.length === 0 ? (
         <p>😢 No tracks found.</p>
       ) : (
@@ -54,3 +76,4 @@ export default function Dashboard() {
     </div>
   );
 }
+
