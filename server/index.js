@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import spotifyAuth from "./routes/spotifyAuth.js"; 
 import OpenAI from 'openai';
 import summariesRouter from "./routes/summaries.js";
-
+import groupRecommenderRouter from './routes/groupRecommender.js';
 
 
 const openai = new OpenAI({
@@ -25,6 +25,7 @@ app.use(express.json());
 // 🔗 Connect Spotify route
 app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
+app.use('/group-recommender', groupRecommenderRouter);
 
 
 // Test route (optional)
