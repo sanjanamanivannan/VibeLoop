@@ -3,7 +3,6 @@ import fetch from "node-fetch";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Import generateMusicSummary from functions directory
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const functionsPath = path.resolve(__dirname, "../../functions/generateSummary.js");
@@ -23,7 +22,6 @@ router.post("/", async (req, res) => {
   }
 
   try {
-    // Get top tracks from Spotify
     const spotifyRes = await fetch("https://api.spotify.com/v1/me/top/tracks?limit=15", {
       headers: {
         Authorization: `Bearer ${spotifyAccessToken}`,
@@ -36,12 +34,16 @@ router.post("/", async (req, res) => {
     }
 
     const data = await spotifyRes.json();
-    const trackList = data.items
-      .map(track => `${track.name} by ${track.artists.map(a => a.name).join(", ")}`)
-      .join("\n");
 
-    // Call your OpenAI summary function
-    const summary = await generateMusicSummary(trackList);
+    const simplifiedLogs = data.items.map(track => ({
+      track: track.name,
+      artist: track.artists.map(a => a.name).join(", "),
+      tags: track.genres || [],
+      note: "",
+      date: new Date().toISOString()
+    }));
+
+    const summary = await generateMusicSummary(simplifiedLogs);
 
     return res.status(200).json({ summary });
   } catch (error) {
