@@ -5,6 +5,8 @@ import spotifyAuth from "./routes/spotifyAuth.js";
 import OpenAI from 'openai';
 import summariesRouter from "./routes/summaries.js";
 import groupRecommenderRouter from './routes/groupRecommender.js';
+import spotifySearchRouter from "./routes/spotifySearch.js";
+
 
 
 const openai = new OpenAI({
@@ -26,6 +28,7 @@ app.use(express.json());
 app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
 app.use('/group-recommender', groupRecommenderRouter);
+app.use("/api/spotify", spotifySearchRouter);
 
 
 // Test route (optional)

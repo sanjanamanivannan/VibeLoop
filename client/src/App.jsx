@@ -3,6 +3,7 @@ import LoginWithSpotify from "./LoginWithSpotify";
 import Callback from "./Callback";
 import Dashboard from "./Dashboard";
 import SummaryViewer from './components/SummaryViewer';
+import SongSearch from "./SongSearch";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/callback/spotify" element={<Callback />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/summary" element={<SummaryViewer />} />
+        <Route path="/search" element={<SongSearch />} />
       </Routes>
     </BrowserRouter>
   );
