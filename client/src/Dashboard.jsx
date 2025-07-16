@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 export default function Dashboard() {
@@ -62,6 +63,20 @@ export default function Dashboard() {
           Logout
         </button>
       </div>
+
+    <div className="flex gap-4 mb-6">
+        <Link to="/search">
+        <button className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+            Search Songs
+        </button>
+        </Link>
+        <Link to="/summary">
+        <button className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+            View Listening Summary
+        </button>
+        </Link>
+    </div>
+
 
       {tracks.length === 0 ? (
         <p>😢 No tracks found.</p>
