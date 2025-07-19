@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AnalyticsButton from "./components/AnalyticsButton"; // Import it here
 
 export default function Dashboard() {
   const [tracks, setTracks] = useState([]);
@@ -9,13 +10,13 @@ export default function Dashboard() {
   useEffect(() => {
     const token = localStorage.getItem("spotify_token");
     console.log("📦 Token from localStorage:", token);
-  
+
     if (!token) {
       console.warn("❌ No token found in localStorage");
       setLoading(false);
       return;
     }
-  
+
     fetch("https://api.spotify.com/v1/me/top/tracks?limit=10&time_range=short_term", {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -54,12 +55,31 @@ export default function Dashboard() {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold">Your Top Tracks</h1>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-        >
-          Logout
-        </button>
+        <div>
+          <button
+            onClick={() => navigate("/summary")}
+            className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 mr-2"
+          >
+            Summary
+          </button>
+          <button
+            onClick={() => navigate("/monthly-summary")}
+            className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 mr-2"
+          >
+            Monthly Summary
+          </button>
+          <button
+            onClick={handleLogout}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Analytics button added here */}
+      <div className="mb-4">
+        <AnalyticsButton />
       </div>
 
       {tracks.length === 0 ? (
@@ -76,4 +96,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
