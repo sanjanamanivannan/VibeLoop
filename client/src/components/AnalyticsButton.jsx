@@ -1,14 +1,36 @@
 import React from "react";
-import { analytics } from "../firebase";
+import { analytics, db } from "../firebase";  // Adjust this path as needed
 import { logEvent } from "firebase/analytics";
+import { doc, setDoc, increment } from "firebase/firestore";
 
-function AnalyticsButton() {
-  const handleClick = () => {
-    logEvent(analytics, 'custom_button_click', {
-      button_name: 'AnalyticsTestButton',
-      description: 'User clicked analytics test button',
+function AnalyticsButton({ userId }) {
+  const handleClick = async () => {
+    // Log global analytics event
+    logEvent(analytics, "custom_button_click", {
+      button_name: "AnalyticsTestButton",
+      description: "User clicked analytics test button",
     });
-    alert("Analytics event logged!");
+
+    if (userId) {
+      // Update per-user analytics data in Firestore
+      const userAnalyticsRef = doc(db, "userAnalytics", userId);
+      try {
+        await setDoc(
+          userAnalyticsRef,
+          {
+            buttonClickCount: increment(1),
+            lastClickedAt: new Date(),
+          },
+          { merge: true } // Merge with existing document instead of overwriting
+        );
+        alert("Analytics event logged and user data updated!");
+      } catch (error) {
+        console.error("Error updating user analytics:", error);
+        alert("Failed to update analytics data.");
+      }
+    } else {
+      alert("User not signed in, analytics event only logged globally.");
+    }
   };
 
   return (

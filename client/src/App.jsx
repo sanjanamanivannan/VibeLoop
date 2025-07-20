@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";  // <-- Add this line!
+import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { auth } from "./firebase";  // your firebase config file
 import { onAuthStateChanged, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
@@ -52,7 +52,8 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginWithSpotify />} />
         <Route path="/callback/spotify" element={<Callback />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        {/* Pass userId as prop to Dashboard */}
+        <Route path="/dashboard" element={<Dashboard userId={userId} />} />
         <Route path="/summary" element={<SummaryViewer />} />
         <Route
           path="/monthly-summary"

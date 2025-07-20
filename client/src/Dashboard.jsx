@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AnalyticsButton from "./components/AnalyticsButton"; // Import it here
+import AnalyticsButton from "./components/AnalyticsButton";
 
-export default function Dashboard() {
+export default function Dashboard({ userId }) {  // <-- accept userId as a prop
   const [tracks, setTracks] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("🆔 Current userId:", userId); // example usage
+
     const token = localStorage.getItem("spotify_token");
     console.log("📦 Token from localStorage:", token);
 
@@ -42,7 +44,7 @@ export default function Dashboard() {
         console.error("🚨 Fetch error:", err);
         setLoading(false);
       });
-  }, []);
+  }, [userId]); // add userId to dependency array if you want effect to run on userId change
 
   const handleLogout = () => {
     localStorage.removeItem("spotify_token"); // Clear token
@@ -77,9 +79,9 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Analytics button added here */}
+      {/* Analytics button */}
       <div className="mb-4">
-        <AnalyticsButton />
+        <AnalyticsButton userId={userId} />
       </div>
 
       {tracks.length === 0 ? (
