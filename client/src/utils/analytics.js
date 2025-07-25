@@ -16,3 +16,17 @@ export async function sendAnalyticsEvent(eventData) {
     console.error("Failed to send analytics event", error);
   }
 }
+
+
+export async function fetchUserAnalytics(userId) {
+  try {
+    const res = await fetch(`http://localhost:3001/analytics/${userId}`);
+    if (!res.ok) throw new Error("Failed to fetch analytics data");
+    
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("Analytics fetch error:", err);
+    return { error: err.message };
+  }
+}

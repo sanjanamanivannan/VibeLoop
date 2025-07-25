@@ -1,6 +1,7 @@
 import admin from '../firebase.js';
 const db = admin.firestore();
 
+// Store a new analytics event
 export const postAnalyticsEvent = async (req, res) => {
   try {
     const event = req.body;
@@ -14,6 +15,7 @@ export const postAnalyticsEvent = async (req, res) => {
   }
 };
 
+// General stats for last 7 days
 export const getStats = async (req, res) => {
   try {
     const analyticsRef = db.collection("analytics");
@@ -59,5 +61,26 @@ export const getStats = async (req, res) => {
   } catch (err) {
     console.error("Failed to get stats:", err);
     res.status(500).json({ error: "Failed to get stats" });
+  }
+};
+
+// Get all analytics data for a specific user
+export const getUserAnalytics = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const snapshot = await db.collection("analytics").where("userId", "==", userId).get();
+
+    if (snapshot.empty) {
+      return res.status(404).json({ error: "No analytics data found for this user." });
+    }
+
+    const events = [];
+    snapshot.forEach(doc => events.push({ id: doc.id, ...doc.data() }));
+
+    res.json({ userId, events });
+  } catch (err) {
+    console.error("Failed to get user analytics:", err);
+    res.status(500).json({ error: "Failed to fetch analytics data." });
   }
 };

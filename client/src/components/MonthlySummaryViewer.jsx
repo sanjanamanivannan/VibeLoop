@@ -13,8 +13,7 @@ export default function MonthlySummaryViewer({ userId }) {
 
     try {
       // Track summary generation request
-      await sendAnalyticsEvent({ event: "summary_generation_request", summaryType: "monthly", userId });
-
+      await sendAnalyticsEvent(userId, {track,artist,tags,note});
       const res = await fetch("http://localhost:3001/summaries/monthly", {
         method: "POST",
         headers: {

@@ -6,6 +6,7 @@ import OpenAI from "openai";
 import summariesRouter from "./routes/summaries.js";
 import monthlySummariesRouter from "./routes/monthlySummary.js";  // <-- import monthly summaries route
 import groupRecommenderRouter from "./routes/groupRecommender.js";
+import analyticsRouter from "./routes/analytics.js";
 
 // Load env vars first
 dotenv.config();
@@ -25,6 +26,7 @@ app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
 app.use("/summaries/monthly", monthlySummariesRouter);  // <-- mount monthly summaries route here
 app.use("/group-recommender", groupRecommenderRouter);
+app.use("/analytics", analyticsRouter); 
 
 // Root test route
 app.get("/", (req, res) => {
