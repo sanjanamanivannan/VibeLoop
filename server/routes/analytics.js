@@ -1,17 +1,22 @@
 import express from "express";
-import { postAnalyticsEvent, getStats, getUserAnalytics} from "../controllers/analyticsController.js";
-import { getFirestore } from "firebase-admin/firestore";
+import {
+  postAnalyticsEvent,
+  getStats,
+  getUserAnalytics,
+  saveUserAnalytics, // <-- You need this for POST /analytics/:userId
+} from "../controllers/analyticsController.js";
 
 const router = express.Router();
-const db = getFirestore();
+// ✅ Save analytics data for a specific user
+router.post("/:userId", saveUserAnalytics);
 
-// POST /analytics — log analytics event
+// Log a general event
 router.post("/", postAnalyticsEvent);
 
-// GET /analytics/stats — (optional) any preexisting stats
+// Optional: precomputed global stats
 router.get("/stats", getStats);
 
-// ✅ NEW: GET /analytics/:userId — get user analytics summary
+// ✅ Retrieve analytics summary for a specific user
 router.get("/:userId", getUserAnalytics);
 
 export default router;

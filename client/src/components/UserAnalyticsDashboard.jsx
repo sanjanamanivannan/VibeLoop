@@ -35,10 +35,31 @@ export default function UserAnalyticsDashboard({ userId }) {
     <div className="bg-gray-100 p-4 mt-2 rounded shadow-md max-w-md">
       <h2 className="text-lg font-semibold mb-2">📈 Your Analytics (last 7 days)</h2>
       <ul className="list-disc list-inside text-sm">
-        <li>🟢 Logins: <strong>{stats.loginCount}</strong></li>
-        <li>🧠 Monthly Summary Requests: <strong>{stats.summaryRequests.monthly}</strong></li>
-        <li>📄 Monthly Summary Views: <strong>{stats.summaryViews.monthly}</strong></li>
-        <li>❌ Errors Logged: <strong>{stats.errorCount}</strong></li>
+        <li>🟢 Logins: <strong>{stats.loginCount || 0}</strong></li>
+        <li>🧠 Monthly Summary Requests: <strong>{stats.summaryRequests?.monthly || 0}</strong></li>
+        <li>📄 Monthly Summary Views: <strong>{stats.summaryViews?.monthly || 0}</strong></li>
+        <li>❌ Errors Logged: <strong>{stats.errorCount || 0}</strong></li>
+
+        {/* Optional Spotify-related stats */}
+        {stats.totalListeningMinutes && (
+          <>
+            <li>🎧 Total Listening Minutes: <strong>{stats.totalListeningMinutes}</strong></li>
+            <li>👨‍🎤 Top Artists:
+              <ul className="ml-5 list-disc">
+                {stats.topArtists?.map((artist) => (
+                  <li key={artist.name}>{artist.name} ({artist.count})</li>
+                ))}
+              </ul>
+            </li>
+            <li>🎵 Top Genres:
+              <ul className="ml-5 list-disc">
+                {stats.topGenres?.map((genre) => (
+                  <li key={genre.name}>{genre.name} ({genre.count})</li>
+                ))}
+              </ul>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   );

@@ -7,7 +7,7 @@ import summariesRouter from "./routes/summaries.js";
 import monthlySummariesRouter from "./routes/monthlySummary.js";  // <-- import monthly summaries route
 import groupRecommenderRouter from "./routes/groupRecommender.js";
 import analyticsRouter from "./routes/analytics.js";
-
+import helmet from "helmet";
 // Load env vars first
 dotenv.config();
 
@@ -19,14 +19,17 @@ const app = express();
 
 // Middleware
 app.use(cors());
+app.use(helmet());
 app.use(express.json());
 
 // Routes
+app.use(express.json());
 app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
 app.use("/summaries/monthly", monthlySummariesRouter);  // <-- mount monthly summaries route here
 app.use("/group-recommender", groupRecommenderRouter);
 app.use("/analytics", analyticsRouter); 
+
 
 // Root test route
 app.get("/", (req, res) => {
@@ -55,6 +58,8 @@ app.get("/test-openai", async (req, res) => {
     });
   }
 });
+
+
 
 // Start server
 const PORT = process.env.PORT || 3001;
