@@ -1,6 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import admin from "firebase-admin"; 
+import { readFileSync } from 'fs';
+const serviceAccount = JSON.parse(readFileSync(new URL('./serviceAccountKey.json', import.meta.url)));
 import spotifyAuth from "./routes/spotifyAuth.js"; 
 import OpenAI from "openai";
 import summariesRouter from "./routes/summaries.js";
@@ -8,6 +11,8 @@ import monthlySummariesRouter from "./routes/monthlySummary.js";  // <-- import 
 import groupRecommenderRouter from "./routes/groupRecommender.js";
 import analyticsRouter from "./routes/analytics.js";
 import helmet from "helmet";
+
+
 // Load env vars first
 dotenv.config();
 
@@ -17,13 +22,13 @@ const openai = new OpenAI({
 
 const app = express();
 
+
 // Middleware
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
 // Routes
-app.use(express.json());
 app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
 app.use("/summaries/monthly", monthlySummariesRouter);  // <-- mount monthly summaries route here
