@@ -4,6 +4,7 @@ import Callback from "./Callback";
 import Dashboard from "./Dashboard";
 import SummaryViewer from './components/SummaryViewer';
 import SongSearch from "./SongSearch";
+import ListeningPatterns from "./pages/ListeningPatterns";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/summary" element={<SummaryViewer />} />
         <Route path="/search" element={<SongSearch />} />
+        <Route path="/patterns" element={<ListeningPatterns />} />
       </Routes>
     </BrowserRouter>
   );

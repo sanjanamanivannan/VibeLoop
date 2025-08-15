@@ -75,6 +75,12 @@ export default function Dashboard() {
             View Listening Summary
         </button>
         </Link>
+        <button 
+            onClick={() => navigate("/patterns")}
+            className="bg-purple-600 text-white px-3 py-1 rounded hover:bg-purple-700"
+          >
+            View Listening Patterns
+          </button>
     </div>
 
 

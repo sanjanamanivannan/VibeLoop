@@ -6,6 +6,8 @@ import OpenAI from 'openai';
 import summariesRouter from "./routes/summaries.js";
 import groupRecommenderRouter from './routes/groupRecommender.js';
 import spotifySearchRouter from "./routes/spotifySearch.js";
+import insightsRouter from "./routes/insights.js";
+import audioFeatureRoutes from "./routes/audioFeatures.js";
 
 
 
@@ -29,6 +31,8 @@ app.use("/api/auth", spotifyAuth);
 app.use("/summaries", summariesRouter);
 app.use('/group-recommender', groupRecommenderRouter);
 app.use("/api/spotify", spotifySearchRouter);
+app.use("/api/insights", insightsRouter);
+app.use("/api/spotify", audioFeatureRoutes);
 
 
 // Test route (optional)
