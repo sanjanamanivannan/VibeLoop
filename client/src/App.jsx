@@ -4,7 +4,7 @@ import Callback from "./Callback";
 import Dashboard from "./Dashboard";
 import SummaryViewer from './components/SummaryViewer';
 import SongSearch from "./SongSearch";
-import ListeningPatterns from "./pages/ListeningPatterns";
+import ListeningPatterns from "./ListeningPatterns";
 
 function App() {
   return (

@@ -1,4 +1,3 @@
-// src/pages/ListeningPatterns.jsx
 import { useState, useEffect } from "react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
@@ -15,7 +14,9 @@ export default function ListeningPatterns() {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ tracks: topTracks })
+        body: JSON.stringify({
+          tracks: topTracks.map(track => track.id)
+        })
       });
 
       const { audioFeatures } = await res.json();
