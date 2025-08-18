@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import processSpotifyTracks, { sendAnalyticsEvent } from "./utils/analytics";
+import AnalyticsViewer from "./components/AnalyticsViewer"; // ✅ Ensure this path is correct
 
-
-export default function Dashboard() {
-  const [tracks, setTracks] = useState([]);
+export default function Dashboard({ userId }) {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [topTracks, setTopTracks] = useState([]);
+  const [showAnalytics, setShowAnalytics] = useState(false); // ✅ New state for toggling
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +44,37 @@ export default function Dashboard() {
       })
       .catch((err) => {
         console.error("🚨 Fetch error:", err);
+
+        const data = await res.json();
+        setTopTracks(data.items);
+
+        // Send raw and processed data
+        await fetch(`http://localhost:3001/analytics/${userId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topArtists: ["Drake", "SZA", "Travis Scott"],
+            topGenres: ["Hip-Hop", "R&B"],
+            totalMinutes: 34,
+          }),
+        });
+
+        const processed = processSpotifyTracks(data.items);
+
+        await sendAnalyticsEvent({
+          event: "spotify_stats_processed",
+          ...processed,
+        });
+
+        await fetch(`http://localhost:3001/analytics/${userId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(processed),
+        });
+      } catch (err) {
+        console.error("🚨 Error during analytics processing:", err);
+        setError("Something went wrong while syncing Spotify data.");
+      } finally {
         setLoading(false);
       });
   }, []);
@@ -83,17 +117,37 @@ export default function Dashboard() {
           </button>
     </div>
 
+      {/* ✅ Button to toggle analytics */}
+      <div className="mb-4">
+        <button
+          onClick={() => setShowAnalytics((prev) => !prev)}
+          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+        >
+          {showAnalytics ? "Hide Analytics" : "Show My Analytics"}
+        </button>
+      </div>
 
-      {tracks.length === 0 ? (
-        <p>😢 No tracks found.</p>
-      ) : (
-        <ul>
-          {tracks.map((track) => (
-            <li key={track.id}>
-              {track.name} — {track.artists[0].name}
-            </li>
-          ))}
-        </ul>
+      {/* ✅ Render analytics viewer if toggled */}
+      {showAnalytics && <AnalyticsViewer userId={userId} />}
+
+      {loading && <p>🔄 Syncing with Spotify...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {!loading && !error && (
+        <>
+
+          {/* 🎧 Display Top 10 Tracks */}
+          <div className="bg-white p-4 rounded shadow-md">
+            <h2 className="text-lg font-semibold mb-2">🎧 Top 10 Tracks</h2>
+            <ul className="list-disc list-inside text-sm">
+              {topTracks.map((track, index) => (
+                <li key={track.id || index}>
+                  {track.name} —{" "}
+                  <em>{track.artists.map((a) => a.name).join(", ")}</em>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );

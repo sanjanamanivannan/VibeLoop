@@ -9,7 +9,12 @@ import spotifySearchRouter from "./routes/spotifySearch.js";
 import insightsRouter from "./routes/insights.js";
 import audioFeatureRoutes from "./routes/audioFeatures.js";
 
+import analyticsRouter from "./routes/analytics.js";
+import helmet from "helmet";
 
+
+// Load env vars first
+dotenv.config();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -33,6 +38,7 @@ app.use('/group-recommender', groupRecommenderRouter);
 app.use("/api/spotify", spotifySearchRouter);
 app.use("/api/insights", insightsRouter);
 app.use("/api/spotify", audioFeatureRoutes);
+app.use("/analytics", analyticsRouter); 
 
 
 // Test route (optional)
