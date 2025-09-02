@@ -1,9 +1,6 @@
 import express from "express";
 import axios from "axios";
 import dotenv from "dotenv";
-import { verifySpotifyToken, getOrCreateFirebaseUser } from "../utils/spotify.js";
-import admin from "firebase-admin";
-
 dotenv.config();
 
 const router = express.Router();
@@ -79,23 +76,5 @@ router.get("/callback/spotify", async (req, res) => {
     res.status(500).send("Authentication failed");
   }
 });
-router.post("/save-token", async (req, res) => {
-  const { token } = req.body;
 
-  if (!token) {
-    return res.status(400).json({ error: "No token received" });
-  }
-
-  try {
-    const spotifyUser = await verifySpotifyToken(token);
-    const firebaseUser = await getOrCreateFirebaseUser(spotifyUser);
-
-    const customToken = await admin.auth().createCustomToken(firebaseUser.uid);
-
-    res.status(200).json({ message: "User authenticated", customToken });
-  } catch (err) {
-    console.error("❌ Auth error:", err);
-    res.status(500).json({ error: "Authentication failed" });
-  }
-});
 export default router;

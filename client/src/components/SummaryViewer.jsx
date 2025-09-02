@@ -5,17 +5,28 @@ export default function SummaryViewer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Example logs - you’ll replace this with real user data
+  const exampleLogs = [
+    {
+      track: "Georgia",
+      artist: "Vance Joy",
+      tags: ["nostalgic", "acoustic"],
+      note: "Heard this while driving home",
+      date: "2025-07-01",
+    },
+    {
+      track: "Snooze",
+      artist: "SZA",
+      tags: ["sad", "rainy"],
+      note: "Perfect for today",
+      date: "2025-07-02",
+    },
+  ];
+
   const fetchSummary = async () => {
     setLoading(true);
     setError(null);
     setSummary("");
-
-    const token = localStorage.getItem("spotify_token");
-    if (!token) {
-      setError("No Spotify token found.");
-      setLoading(false);
-      return;
-    }
 
     try {
       const res = await fetch("http://localhost:3001/summaries", {
@@ -23,7 +34,7 @@ export default function SummaryViewer() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ spotifyAccessToken: token }),
+        body: JSON.stringify({ logs: exampleLogs }),
       });
 
       if (!res.ok) {
