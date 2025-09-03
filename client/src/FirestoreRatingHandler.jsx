@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Star, X } from "lucide-react";
-import db from './firebase.js';
+import { db } from './firebase.js';
 import { doc, setDoc, collection, query, where, getDocs } from 'firebase/firestore';
 
 const saveRatingToFirestore = async (userId, songId, rating, feedback, songData) => {
