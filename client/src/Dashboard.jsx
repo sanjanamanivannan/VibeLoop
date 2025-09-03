@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import processSpotifyTracks, { sendAnalyticsEvent } from "./utils/analytics";
+import processSpotifyTracks, { sendAnalyticsEvent } from "../utils/analytics";
 import AnalyticsViewer from "./components/AnalyticsViewer";
 
 export default function Dashboard({ userId }) {
