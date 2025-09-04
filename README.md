@@ -1,3 +1,6 @@
+Here you go — copy-paste this into `README.md`:
+
+```markdown
 # VibeLoop 🎶  
 *Where music, moods, and friendships sync.*
 
@@ -37,6 +40,8 @@ VibeLoop is a personal music journaling + insights app built on top of the **Spo
 
 ## 📂 Project Structure
 
+```
+
 VibeLoop/
 ├── client/                     # React + Vite
 │   ├── src/
@@ -63,6 +68,8 @@ VibeLoop/
 │
 └── README.md
 
+```
+
 ---
 
 ## 🔑 How Auth Works (Spotify + ngrok + Firebase)
@@ -70,16 +77,23 @@ VibeLoop/
 ### 1) Spotify OAuth
 - Spotify requires a **public HTTPS redirect URI**.
 - In development we use **ngrok** to expose the local server (e.g., `http://localhost:3001`) to a temporary **https** URL.
-- The server handles the Spotify OAuth callback at: https\://<your-ngrok-subdomain>.ngrok-free.app/api/auth/callback/spotify
+- The server handles the Spotify OAuth callback at:
+```
 
+https\://<your-ngrok-subdomain>.ngrok-free.app/api/auth/callback/spotify
 
-- After exchanging the `code` for an access token, the backend redirects to the frontend: [http://localhost:5173/callback/spotify?access\_token=](http://localhost:5173/callback/spotify?access_token=)...
+```
+- After exchanging the `code` for an access token, the backend redirects to the frontend:
+```
 
+[http://localhost:5173/callback/spotify?access\_token=](http://localhost:5173/callback/spotify?access_token=)...
 
+```
 - The frontend stores the token in `localStorage` and uses it to call Spotify APIs.
 
 ### 2) Firebase (Firestore)
 - Ratings and notes are saved in Firestore under a `ratings` collection:
+```
 
 ratings/{songId} => {
 userId: string,
@@ -89,6 +103,7 @@ feedback: string,         // optional comment
 timestamp: number         // Date.now()
 }
 
+````
 - You don’t need to create the collection manually — Firestore will create it on first write.
 
 ---
@@ -103,7 +118,6 @@ timestamp: number         // Date.now()
 - ngrok
 
 ### 1) Clone & Install
-
 ```bash
 git clone <your-repo-url>
 cd VibeLoop
@@ -247,9 +261,7 @@ export default defineConfig({
 * **Sanjana Manivannan**
 * **Meghana Reddy**
 
-```
 
-If you want, I can also drop in sample **Firestore rules** for a basic ratings schema and a small set of **cURL examples** for the server endpoints.
-```
+
 
 
