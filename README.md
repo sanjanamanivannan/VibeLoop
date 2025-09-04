@@ -1,6 +1,3 @@
-Here you go — copy-paste this into `README.md`:
-
-```markdown
 # VibeLoop 🎶  
 *Where music, moods, and friendships sync.*
 
@@ -260,6 +257,7 @@ export default defineConfig({
 
 * **Sanjana Manivannan**
 * **Meghana Reddy**
+
 
 
 
