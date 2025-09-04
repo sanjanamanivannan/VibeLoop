@@ -3,13 +3,21 @@ VibeLoop is a personal music journaling and insights app built on top of the Spo
 🚀 Features
 
 Spotify OAuth Login – Secure authentication using Spotify accounts.
+
 Song Search – Search tracks from Spotify's catalog.
+
 Rating System – Rate songs from ★½ to ★★★★★ with optional comments.
+
 Music Log – Keep a timeline of your ratings and notes.
+
 AI Insights – Automatically generate summaries of listening patterns using OpenAI.
+
 Analytics Dashboard – Visualize your top tracks, genres, and moods.
+
 Secure Backend – Express.js server with Helmet for security hardening.
+
 Firebase Integration – Store ratings, logs, and user data.
+
 Ngrok Tunneling – Used during development to test Spotify OAuth callbacks locally.
 
 🛠️ Tech Stack
@@ -71,8 +79,8 @@ Ngrok (for local OAuth testing)
 Setup
 
 Clone the repo:
-bashgit clone https://github.com/your-username/vibeloop.git
-cd vibeloop
+bashgit clone https://github.com/sanjanamanivannan/VibeLoop.git
+cd VibeLoop
 
 Install dependencies:
 bashcd server && npm install
@@ -119,4 +127,3 @@ Firebase provides session security and real-time database syncing.
 
 Sanjana Manivannan
 Meghana Reddy
-
