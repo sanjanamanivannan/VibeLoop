@@ -5,7 +5,7 @@ VibeLoop is a personal music journaling + insights app built on top of the **Spo
 
 ---
 
-## 🚀 Features
+## Features
 - **Spotify OAuth** login (with **ngrok** for local callback testing)
 - **Song search** (Spotify API)
 - **Ratings + notes** (½-star increments, optional comments)
@@ -16,7 +16,7 @@ VibeLoop is a personal music journaling + insights app built on top of the **Spo
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 **Frontend**
 - React + Vite + React Router
 - Tailwind (utility styles)
@@ -69,7 +69,7 @@ VibeLoop/
 
 ---
 
-## 🔑 How Auth Works (Spotify + ngrok + Firebase)
+## How Auth Works (Spotify + ngrok + Firebase)
 
 ### 1) Spotify OAuth
 - Spotify requires a **public HTTPS redirect URI**.
@@ -105,7 +105,7 @@ timestamp: number         // Date.now()
 
 ---
 
-## ⚙️ Setup
+## Setup
 
 ### Prerequisites
 - Node.js 18+ (22 recommended)
@@ -188,7 +188,7 @@ npm run dev
 
 ---
 
-## ▶️ Usage Flow
+## Usage Flow
 
 1. Go to `http://localhost:5173` and click **Login with Spotify**.
 2. After login, you’ll land on `/dashboard` with your **Top Tracks**.
@@ -198,7 +198,7 @@ npm run dev
 
 ---
 
-## 🔍 Key API Endpoints (server)
+## Key API Endpoints (server)
 
 * `POST /api/auth/getSpotifyToken` – (optional) manual token exchange
 * `GET  /api/auth/callback/spotify` – OAuth callback (used by Spotify)
@@ -207,7 +207,7 @@ npm run dev
 
 ---
 
-## 🔒 Security Notes
+## Security Notes
 
 * **helmet** is used server-side for HTTP headers hardening.
 * **CORS** configured for `http://localhost:5173` during dev.
@@ -215,7 +215,7 @@ npm run dev
 
 ---
 
-## 🧰 Troubleshooting
+## Troubleshooting
 
 **Blank callback / 404 on callback**
 
@@ -228,15 +228,6 @@ npm run dev
 * Allow `http://localhost:5173` in server CORS.
 * If using a public tunnel for the client, add that origin too.
 
-**Vite allowedHosts (ngrok)**
-
-```js
-// vite.config.js
-export default defineConfig({
-  server: { allowedHosts: ['<your-ngrok-subdomain>.ngrok-free.app'] }
-});
-```
-
 **Firestore writes not appearing**
 
 * Confirm Firebase config matches your project.
@@ -244,19 +235,11 @@ export default defineConfig({
 
 ---
 
-## 🗺️ Roadmap
-
-* Friend feeds + vibe matches
-* Group recommender (AI)
-* Public profiles + shareable logs
-* Better visualizations
-
----
-
 ## 👥 Contributors
 
 * **Sanjana Manivannan**
 * **Meghana Reddy**
+
 
 
 
