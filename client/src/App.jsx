@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { auth } from "./firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useState, useEffect } from "react";
-
 import LoginWithSpotify from "./LoginWithSpotify";
 import Callback from "./Callback";
 import Dashboard from "./Dashboard";
