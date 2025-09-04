@@ -35,7 +35,7 @@ VibeLoop is a personal music journaling + insights app built on top of the **Spo
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 
@@ -235,10 +235,11 @@ npm run dev
 
 ---
 
-## 👥 Contributors
+## Contributors
 
 * **Sanjana Manivannan**
 * **Meghana Reddy**
+
 
 
 
