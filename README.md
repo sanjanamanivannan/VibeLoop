@@ -1,129 +1,255 @@
-VibeLoop 🎶
-VibeLoop is a personal music journaling and insights app built on top of the Spotify API. It lets you log, rate, and reflect on songs — like a "Letterboxd for music" — while also surfacing AI-powered insights into your listening habits.
-🚀 Features
+# VibeLoop 🎶  
+*Where music, moods, and friendships sync.*
 
-Spotify OAuth Login – Secure authentication using Spotify accounts.
+VibeLoop is a personal music journaling + insights app built on top of the **Spotify API**. Log and rate songs, add notes/tags, and see AI-powered summaries of your listening patterns.
 
-Song Search – Search tracks from Spotify's catalog.
+---
 
-Rating System – Rate songs from ★½ to ★★★★★ with optional comments.
+## 🚀 Features
+- **Spotify OAuth** login (with **ngrok** for local callback testing)
+- **Song search** (Spotify API)
+- **Ratings + notes** (½-star increments, optional comments)
+- **Music log** (stored in **Firebase Firestore**)
+- **Listening patterns & AI insights** (OpenAI + audio features)
+- **Dashboard** with top tracks and quick links
+- Secure **Express** backend (with **helmet**, **CORS**)
 
-Music Log – Keep a timeline of your ratings and notes.
+---
 
-AI Insights – Automatically generate summaries of listening patterns using OpenAI.
+## 🛠️ Tech Stack
+**Frontend**
+- React + Vite + React Router
+- Tailwind (utility styles)
+  
+**Backend**
+- Node.js + Express
+- Helmet, CORS, Axios
 
-Analytics Dashboard – Visualize your top tracks, genres, and moods.
+**Data & AI**
+- Firebase Firestore
+- Spotify Web API
+- OpenAI API
 
-Secure Backend – Express.js server with Helmet for security hardening.
+**Dev Utilities**
+- Ngrok (public HTTPS tunnel for OAuth during development)
 
-Firebase Integration – Store ratings, logs, and user data.
+---
 
-Ngrok Tunneling – Used during development to test Spotify OAuth callbacks locally.
+## 📂 Project Structure
 
-🛠️ Tech Stack
-Frontend
-
-React + Vite
-TailwindCSS (for styling)
-React Router
-
-Backend
-
-Node.js + Express
-Firebase (database + auth)
-Spotify Web API
-OpenAI API (for insights)
-Helmet (security middleware)
-Ngrok (for exposing local server to the web)
-
-🔑 Authentication Flow
-Spotify OAuth with Ngrok
-
-Spotify requires a public redirect URI for OAuth.
-During development, ngrok was used to expose the local backend (http://localhost:5000) to a temporary public HTTPS URL.
-This URL was set as the Spotify Redirect URI in the Spotify Developer Dashboard, enabling local login without deploying.
-
-Firebase Integration
-
-Firebase Authentication manages user sessions.
-After a successful Spotify OAuth login, tokens are securely stored and linked with the user's Firebase profile.
-Firebase Firestore stores song ratings, notes, and analytics data.
-
-This combination ensures that users log in with Spotify, while their personal data (ratings, notes, history) is managed safely via Firebase.
-📂 Project Structure
 VibeLoop/
-├── client/               # Frontend (React + Vite)
+├── client/                     # React + Vite
 │   ├── src/
-│   │   ├── pages/        # Dashboard, Search, etc.
-│   │   ├── components/   # Reusable UI components
-│   │   └── utils/        # Helpers (e.g. insights.js)
-│   └── package.json
+│   │   ├── App.jsx
+│   │   ├── LoginWithSpotify.jsx
+│   │   ├── Callback.jsx
+│   │   ├── Dashboard.jsx
+│   │   ├── SongSearch.jsx
+│   │   ├── ListeningPatterns.jsx
+│   │   ├── components/
+│   │   │   ├── RatingModel.jsx
+│   │   │   └── AnalyticsViewer.jsx
+│   │   └── utils/
+│   │       └── insights.js
+│   └── index.html
 │
-├── server/               # Backend (Express)
-│   ├── routes/           # API routes
-│   ├── models/           # Firebase/DB models
-│   ├── controllers/      # API controllers
-│   └── server.js         # Entry point
+├── server/                     # Express API
+│   ├── index.js
+│   ├── routes/
+│   │   ├── spotifyAuth.js      # /api/auth/\*
+│   │   ├── spotifySearch.js    # /api/spotify/search
+│   │   └── audioFeatures.js    # /api/spotify/audio-features
+│   └── controllers/
 │
 └── README.md
-⚡ Getting Started
-Prerequisites
 
-Node.js (v22+)
-npm or yarn
-Spotify Developer account + app (for API keys)
-Firebase project (for database & auth)
-OpenAI API key
-Ngrok (for local OAuth testing)
+---
 
-Setup
+## 🔑 How Auth Works (Spotify + ngrok + Firebase)
 
-Clone the repo:
-bashgit clone https://github.com/sanjanamanivannan/VibeLoop.git
+### 1) Spotify OAuth
+- Spotify requires a **public HTTPS redirect URI**.
+- In development we use **ngrok** to expose the local server (e.g., `http://localhost:3001`) to a temporary **https** URL.
+- The server handles the Spotify OAuth callback at: https\://<your-ngrok-subdomain>.ngrok-free.app/api/auth/callback/spotify
+
+
+- After exchanging the `code` for an access token, the backend redirects to the frontend: [http://localhost:5173/callback/spotify?access\_token=](http://localhost:5173/callback/spotify?access_token=)...
+
+
+- The frontend stores the token in `localStorage` and uses it to call Spotify APIs.
+
+### 2) Firebase (Firestore)
+- Ratings and notes are saved in Firestore under a `ratings` collection:
+
+ratings/{songId} => {
+userId: string,
+songId: string,
+rating: number,           // e.g. 3.5
+feedback: string,         // optional comment
+timestamp: number         // Date.now()
+}
+
+- You don’t need to create the collection manually — Firestore will create it on first write.
+
+---
+
+## ⚙️ Setup
+
+### Prerequisites
+- Node.js 18+ (22 recommended)
+- Spotify Developer account + app
+- Firebase project (Firestore enabled)
+- OpenAI API key (for insights)
+- ngrok
+
+### 1) Clone & Install
+
+```bash
+git clone <your-repo-url>
 cd VibeLoop
 
-Install dependencies:
-bashcd server && npm install
+# server deps
+cd server && npm install
+
+# client deps
 cd ../client && npm install
+````
 
-Create .env files in both server and client:
-server/.env
-SPOTIFY_CLIENT_ID=your_client_id
-SPOTIFY_CLIENT_SECRET=your_client_secret
-FIREBASE_API_KEY=your_firebase_key
+### 2) Environment Variables
+
+**server/.env**
+
+```
+# Spotify
+SPOTIFY_CLIENT_ID=your_spotify_client_id
+SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
+SPOTIFY_REDIRECT_URI=https://<your-ngrok>.ngrok-free.app/api/auth/callback/spotify
+FRONTEND_REDIRECT_URI=http://localhost:5173/callback/spotify
+
+# OpenAI
 OPENAI_API_KEY=your_openai_key
-client/.env
-VITE_SPOTIFY_REDIRECT_URI=http://localhost:5173/callback
-VITE_API_URL=http://localhost:5000
+```
 
-Start backend:
-bashcd server
+**client/.env**
+
+```
+VITE_API_URL=http://localhost:3001
+# If you also read Firebase config from env:
+VITE_FIREBASE_API_KEY=your_firebase_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=xxxx
+VITE_FIREBASE_APP_ID=xxxx
+```
+
+> You can also hardcode the Firebase config in `client/src/firebase.js` if you prefer, but env variables are recommended.
+
+### 3) Start Backend
+
+```bash
+cd server
 npm run dev
+# server runs on http://localhost:3001
+```
 
-Start frontend:
-bashcd client
+### 4) Start ngrok (for Spotify callback)
+
+```bash
+ngrok http 3001
+```
+
+* Copy the `https://<something>.ngrok-free.app` URL.
+* Add it to **Spotify Developer Dashboard → Your App → Redirect URIs** as:
+
+  ```
+  https://<your-ngrok>.ngrok-free.app/api/auth/callback/spotify
+  ```
+* Ensure the **same** URL is in `server/.env` as `SPOTIFY_REDIRECT_URI`.
+
+### 5) Start Frontend
+
+```bash
+cd client
 npm run dev
+# opens http://localhost:5173
+```
 
-Run ngrok (to test Spotify OAuth locally):
-bashngrok http 5000
-Copy the generated HTTPS URL into your Spotify Developer Dashboard → Redirect URIs.
-Visit app:
-http://localhost:5173
+---
+
+## ▶️ Usage Flow
+
+1. Go to `http://localhost:5173` and click **Login with Spotify**.
+2. After login, you’ll land on `/dashboard` with your **Top Tracks**.
+3. Navigate to **Search** to find songs. Click the ⭐ to open the **rating popup** (supports 0.5 increments + comments).
+4. Ratings/notes are saved to **Firestore**.
+5. See **Listening Patterns** for energy/valence mood buckets (uses audio features).
+
+---
+
+## 🔍 Key API Endpoints (server)
+
+* `POST /api/auth/getSpotifyToken` – (optional) manual token exchange
+* `GET  /api/auth/callback/spotify` – OAuth callback (used by Spotify)
+* `GET  /api/spotify/search?q=<query>&token=<accessToken>` – search tracks
+* `POST /api/spotify/audio-features?token=<accessToken>` – audio features for tracks
+
+---
+
+## 🔒 Security Notes
+
+* **helmet** is used server-side for HTTP headers hardening.
+* **CORS** configured for `http://localhost:5173` during dev.
+* Never commit real secrets. Use `.env` files.
+
+---
+
+## 🧰 Troubleshooting
+
+**Blank callback / 404 on callback**
+
+* Make sure your **ngrok URL** in `SPOTIFY_REDIRECT_URI` matches the one in the **Spotify dashboard**.
+* Your server must mount the router: `app.use("/api/auth", spotifyAuth);`
+* Callback route should be `/api/auth/callback/spotify`.
+
+**CORS errors**
+
+* Allow `http://localhost:5173` in server CORS.
+* If using a public tunnel for the client, add that origin too.
+
+**Vite allowedHosts (ngrok)**
+
+```js
+// vite.config.js
+export default defineConfig({
+  server: { allowedHosts: ['<your-ngrok-subdomain>.ngrok-free.app'] }
+});
+```
+
+**Firestore writes not appearing**
+
+* Confirm Firebase config matches your project.
+* Check browser console for permission errors; update **Firestore Security Rules** accordingly.
+
+---
+
+## 🗺️ Roadmap
+
+* Friend feeds + vibe matches
+* Group recommender (AI)
+* Public profiles + shareable logs
+* Better visualizations
+
+---
+
+## 👥 Contributors
+
+* **Sanjana Manivannan**
+* **Meghana Reddy**
+
+```
+
+If you want, I can also drop in sample **Firestore rules** for a basic ratings schema and a small set of **cURL examples** for the server endpoints.
+```
 
 
-🔒 Security Notes
-
-Helmet is enabled on the backend to protect against common web vulnerabilities.
-Tokens are securely stored and refreshed for Spotify OAuth.
-Firebase provides session security and real-time database syncing.
-
-📈 Roadmap
-
- Collaborative playlists with friends
- Mood-based recommendations
- Mobile-friendly PWA version
-
-👥 Contributors
-
-Sanjana Manivannan
-Meghana Reddy
